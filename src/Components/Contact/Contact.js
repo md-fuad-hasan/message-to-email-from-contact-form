@@ -9,7 +9,9 @@ class Contact extends Component{
             name : '',
             email : '',
             message : '',
-            
+            validEmail : false,
+            showMessage : '',
+            visibility : false
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -22,7 +24,60 @@ class Contact extends Component{
         this.setState({
             [name]:value
         });
+        
+
+        switch (name) {
+            case 'email':
+                if(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)){
+                    this.setState({
+                        validEmail : true
+                    })
+                }
+                break;
+            default:
+                break;
+        }
+
     }
+
+
+    handleValidation(e){
+        if( this.state.name && this.state.validEmail && this.state.message){
+            this.handleSubmit(e);
+        }
+        else{
+            this.showError("Fill up all the section correctly!");
+        }
+        e.preventDefault();
+    }
+
+    showError(msg){
+        this.setState({
+            showMessage: msg,
+            visibility : true
+        })
+
+        setTimeout(()=>{
+            this.crossMessage();
+        },3000);
+    }
+
+    showSuccess(msg){
+        this.setState({
+            showMessage: msg,
+            visibility : true
+        })
+        setTimeout(()=>{
+            this.crossMessage();
+        },3000);
+    }
+
+    crossMessage(){
+        this.setState({
+            visibility: false
+        })
+    }
+    
 
     handleSubmit(e){
         
@@ -37,7 +92,7 @@ class Contact extends Component{
             name:'',
             email:'',
             message: '',
-            formValid: false
+            validEmail: false
         })
 
 
@@ -48,10 +103,10 @@ class Contact extends Component{
 
         emailjs.send(YOUR_SERVICE_ID,YOUR_TEMPLATE_ID,param,YOUR_PUBLIC_KEY)
         .then(res=>{
-            console.log(res);
+            this.showSuccess("Message sent succesfully!")
         })
         .catch(err=>{
-            console.log(err);
+            this.showError("Something went wrong")
         })
 
 
@@ -59,18 +114,27 @@ class Contact extends Component{
 
     }
 
-
-
+    
 
     render(){
+
         return(
             <div className="contact">
+                {
+                    this.state.visibility && <div className="alert" >
+                    <div>{this.state.showMessage}</div>
+                    <button className="alert-cross-btn" onClick={()=>this.crossMessage()}>X</button>
+                </div>
+                }
+                
                 <div className="form-container">
-                    <form className="form" onSubmit={e=>this.handleSubmit(e)}>   
+                    <form className="form" > 
+                        <h1 className="form-heading">Send Me Message</h1>
+
                         <input type="text" className="name" value={this.state.name} name="name" placeholder="Enter your Name" onChange={(e)=>this.handleChange(e)} />
                         <input type="email" className="email" value={this.state.email} name='email' placeholder="Enter your Email" onChange={(e)=>this.handleChange(e)} />
                         <textarea rows={4} className="message" value={this.state.message} name="message" placeholder="Your message" onChange={(e)=>this.handleChange(e)} />
-                        <button type="submit"  className="submit" onClick={e=>this.handleSubmit(e)}>Send</button>
+                        <button type="submit"  className="submit" onClick={e=>this.handleValidation(e)}>Send</button>
                     </form>
                 </div>
                 
