@@ -43,7 +43,7 @@ class Contact extends Component{
 
     handleValidation(e){
         if( this.state.name && this.state.validEmail && this.state.message){
-            this.handleSubmit(e);
+            this.handleSubmit();
         }
         else{
             this.showError("Fill up all the section correctly!");
@@ -59,7 +59,7 @@ class Contact extends Component{
 
         setTimeout(()=>{
             this.crossMessage();
-        },3000);
+        },4000);
     }
 
     showSuccess(msg){
@@ -69,7 +69,7 @@ class Contact extends Component{
         })
         setTimeout(()=>{
             this.crossMessage();
-        },3000);
+        },4000);
     }
 
     crossMessage(){
@@ -131,9 +131,9 @@ class Contact extends Component{
                     <form className="form" > 
                         <h1 className="form-heading">Send Me Message</h1>
 
-                        <input type="text" className="name" value={this.state.name} name="name" placeholder="Enter your Name" onChange={(e)=>this.handleChange(e)} />
-                        <input type="email" className="email" value={this.state.email} name='email' placeholder="Enter your Email" onChange={(e)=>this.handleChange(e)} />
-                        <textarea rows={4} className="message" value={this.state.message} name="message" placeholder="Your message" onChange={(e)=>this.handleChange(e)} />
+                        <input type="text" className="name" value={this.state.name} name="name" placeholder="Enter your Name" onChange={this.handleChange} />
+                        <input type="email" className="email" value={this.state.email} name='email' placeholder="Enter your Email" onChange={this.handleChange} />
+                        <textarea rows={4} className="message" value={this.state.message} name="message" placeholder="Your message" onChange={this.handleChange} />
                         <button type="submit"  className="submit" onClick={e=>this.handleValidation(e)}>Send</button>
                     </form>
                 </div>
